@@ -1,0 +1,121 @@
+
+build/main.o:     file format elf32-i386
+
+Contents of section .group:
+ 0000 01000000 06000000                    ........        
+Contents of section .text:
+ 0000 5589e5e8 fcffffff 05010000 00ebfe    U.............. 
+Contents of section .text.__x86.get_pc_thunk.ax:
+ 0000 8b0424c3                             ..$.            
+Contents of section .comment:
+ 0000 00474343 3a202847 4e552920 31352e32  .GCC: (GNU) 15.2
+ 0010 2e312032 30323630 31303300           .1 20260103.    
+Contents of section .note.gnu.property:
+ 0000 04000000 18000000 05000000 474e5500  ............GNU.
+ 0010 020001c0 04000000 00000000 010001c0  ................
+ 0020 04000000 01000000                    ........        
+Contents of section .eh_frame:
+ 0000 14000000 00000000 017a5200 017c0801  .........zR..|..
+ 0010 1b0c0404 88010000 18000000 1c000000  ................
+ 0020 00000000 0f000000 00410e08 8502420d  .........A....B.
+ 0030 05000000 10000000 38000000 00000000  ........8.......
+ 0040 04000000 00000000                    ........        
+
+Disassembly of section .group:
+
+00000000 <.group>:
+   0:	01 00                	add    %eax,(%eax)
+   2:	00 00                	add    %al,(%eax)
+   4:	06                   	push   %es
+   5:	00 00                	add    %al,(%eax)
+	...
+
+Disassembly of section .text:
+
+00000000 <kernel_init>:
+   0:	55                   	push   %ebp
+   1:	89 e5                	mov    %esp,%ebp
+   3:	e8 fc ff ff ff       	call   4 <kernel_init+0x4>
+   8:	05 01 00 00 00       	add    $0x1,%eax
+   d:	eb fe                	jmp    d <kernel_init+0xd>
+
+Disassembly of section .text.__x86.get_pc_thunk.ax:
+
+00000000 <__x86.get_pc_thunk.ax>:
+   0:	8b 04 24             	mov    (%esp),%eax
+   3:	c3                   	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	00 47 43             	add    %al,0x43(%edi)
+   3:	43                   	inc    %ebx
+   4:	3a 20                	cmp    (%eax),%ah
+   6:	28 47 4e             	sub    %al,0x4e(%edi)
+   9:	55                   	push   %ebp
+   a:	29 20                	sub    %esp,(%eax)
+   c:	31 35 2e 32 2e 31    	xor    %esi,0x312e322e
+  12:	20 32                	and    %dh,(%edx)
+  14:	30 32                	xor    %dh,(%edx)
+  16:	36 30 31             	xor    %dh,%ss:(%ecx)
+  19:	30 33                	xor    %dh,(%ebx)
+	...
+
+Disassembly of section .note.gnu.property:
+
+00000000 <.note.gnu.property>:
+   0:	04 00                	add    $0x0,%al
+   2:	00 00                	add    %al,(%eax)
+   4:	18 00                	sbb    %al,(%eax)
+   6:	00 00                	add    %al,(%eax)
+   8:	05 00 00 00 47       	add    $0x47000000,%eax
+   d:	4e                   	dec    %esi
+   e:	55                   	push   %ebp
+   f:	00 02                	add    %al,(%edx)
+  11:	00 01                	add    %al,(%ecx)
+  13:	c0 04 00 00          	rolb   $0x0,(%eax,%eax,1)
+  17:	00 00                	add    %al,(%eax)
+  19:	00 00                	add    %al,(%eax)
+  1b:	00 01                	add    %al,(%ecx)
+  1d:	00 01                	add    %al,(%ecx)
+  1f:	c0 04 00 00          	rolb   $0x0,(%eax,%eax,1)
+  23:	00 01                	add    %al,(%ecx)
+  25:	00 00                	add    %al,(%eax)
+	...
+
+Disassembly of section .eh_frame:
+
+00000000 <.eh_frame>:
+   0:	14 00                	adc    $0x0,%al
+   2:	00 00                	add    %al,(%eax)
+   4:	00 00                	add    %al,(%eax)
+   6:	00 00                	add    %al,(%eax)
+   8:	01 7a 52             	add    %edi,0x52(%edx)
+   b:	00 01                	add    %al,(%ecx)
+   d:	7c 08                	jl     17 <.eh_frame+0x17>
+   f:	01 1b                	add    %ebx,(%ebx)
+  11:	0c 04                	or     $0x4,%al
+  13:	04 88                	add    $0x88,%al
+  15:	01 00                	add    %eax,(%eax)
+  17:	00 18                	add    %bl,(%eax)
+  19:	00 00                	add    %al,(%eax)
+  1b:	00 1c 00             	add    %bl,(%eax,%eax,1)
+  1e:	00 00                	add    %al,(%eax)
+  20:	00 00                	add    %al,(%eax)
+  22:	00 00                	add    %al,(%eax)
+  24:	0f 00 00             	sldt   (%eax)
+  27:	00 00                	add    %al,(%eax)
+  29:	41                   	inc    %ecx
+  2a:	0e                   	push   %cs
+  2b:	08 85 02 42 0d 05    	or     %al,0x50d4202(%ebp)
+  31:	00 00                	add    %al,(%eax)
+  33:	00 10                	add    %dl,(%eax)
+  35:	00 00                	add    %al,(%eax)
+  37:	00 38                	add    %bh,(%eax)
+  39:	00 00                	add    %al,(%eax)
+  3b:	00 00                	add    %al,(%eax)
+  3d:	00 00                	add    %al,(%eax)
+  3f:	00 04 00             	add    %al,(%eax,%eax,1)
+  42:	00 00                	add    %al,(%eax)
+  44:	00 00                	add    %al,(%eax)
+	...
