@@ -1,1 +1,1 @@
-qemu-system-i386 kernel.iso
+qemu-system-i386 -s kernel.iso

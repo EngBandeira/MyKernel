@@ -1,0 +1,8 @@
+Intel: base + index * scale + displacement = At&t disp(base, index, scale)
+# 8 + %edx*4 + %ebp = %ebp(8, %edx, 4)
+
+Extend:
+Movs: Mov Signed
+Movz: Mov Zero Extend
+Add to that the letters in order of the operands
+movzbl %al, %eax

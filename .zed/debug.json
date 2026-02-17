@@ -1,0 +1,36 @@
+[
+  {
+    "label": "MyKernel GDB",
+    "adapter": "GDB",
+    "tcp_connection": {
+      "port": 1234,
+    },
+    "request": "launch",
+    "program": "${ZED_WORKTREE_ROOT}/iso/boot/kernel",
+    "gdb_path": "/usr/bin/gdb",
+    "cwd": "${ZED_WORKTREE_ROOT}",
+    "stopAtBeginningOfMainSubprogram": false,
+    "setupCommands": [
+      {
+        "description": "Set up remote target",
+        "text": "target remote localhost:1234",
+        "ignoreFailures": false,
+      },
+      {
+        "description": "Load symbols",
+        "text": "symbol-file iso/boot/kernel",
+        "ignoreFailures": false,
+      },
+    ],
+    "gdb_args": [
+      "-ex",
+      "file /home/bandeira/Documents/GIT/MyKernel/iso/boot/kernel",
+      "-ex",
+      "shell echo 'CWD:' $(pwd)",
+      "-ex",
+      "shell ls -la /home/bandeira/Documents/GIT/MyKernel/src/main.c",
+      "-ex",
+      "target remote localhost:1234",
+    ],
+  },
+]

@@ -2,6 +2,7 @@ ENTRY(_start)
 OUTPUT_FORMAT(elf32-i386)
 
 SECTIONS {
+
     . = 2M;
     .text BLOCK(4k) :  ALIGN(4k)
     {
