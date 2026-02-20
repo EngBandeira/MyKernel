@@ -6,6 +6,9 @@ static int VGA_WIDTH =  80;
 static int VGA_HEIGHT =  25;
 #define VGA_MEMORY  0xB8000
 
+extern uint32_t _GDT;
+extern uint32_t _IDT;
+
 static int line = 0;
 
 enum vga_color {
@@ -84,9 +87,26 @@ void vga_str_put(char *c) {
     line++;
 }
 
+void set_gdt_entry(uint16_t index, uint32_t limit ,uint32_t base, uint8_t access,  uint8_t flags) {
+    uint8_t *ptr = (uint8_t *)_GDT;
+
+    ptr[0] = ((uint8_t)limit);
+    ptr[1] = ((uint8_t*)&limit)[1];
+    ptr[2] = (uint8_t)base;
+    ptr[3] = ((uint8_t*)&base)[1];
+
+    ptr[4] = ((uint8_t*)&base)[2];
+    ptr[5] = access;
+    ptr[6] = (((uint8_t*)&limit)[2] & 0b1111) &  (flags & 0b1111) << 4;
+    ptr[7] = ((uint8_t*)&base)[3];
+
+}
 
 void kernel_init() {
     vga_init();
+
+    set_gdt_entry(0, 0 ,0, 0, 0);
+    set_gdt_entry(1, 0 ,0, 0b10001111, 0b0100);
 }
 
 void kernel_routine() {

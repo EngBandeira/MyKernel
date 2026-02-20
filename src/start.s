@@ -9,13 +9,25 @@
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
-.code16
+
+
+
 .section .data
 
-GDT:
+.align(8)
+.global _GDT
+_GDT:
     .skip(800)
-GDT_e:
+_GDT_e:
 
+.align(8)
+.global _IDT
+_IDT = .
+    .skip(800)
+_IDT_e = .
+
+# .=.+4
+# .space(4)
 
 MESSAGE:
     .asciz "CARAMBA QUE PINTO ENORME"
@@ -30,6 +42,8 @@ stack_top:
 
 .global _start
 
+
+
 _keyboard_int:
     # call keyboard_event
     # movl $0xD0, 0x64
@@ -37,6 +51,8 @@ _keyboard_int:
     pushl $MESSAGE
     call vga_str_put
     ret
+
+
 
 _send_keyboard_command:
     pushl %ebp
@@ -75,12 +91,11 @@ _send_keyboard_command:
     ret
 
 _start:
-    # cli
-    mov $stack_top, %esp
-    movw $_keyboard_int, %ax
-    movw %ax, 0x24
-    movw %cs, 0x26                  # Store segment at 0x26
-    # lidt $IVT_i
+    cli
+    movl $stack_top, %esp
+    movl _keyboard_int, %eax # Store segment at 0x26
+    lidt _IDT
+    lgdt _GDT
 
 
 
@@ -166,7 +181,8 @@ _start:
     pushl $MESSAGE
     call vga_str_put
 
-    popl %eax
+    addl $4, %esp
+
 
     call kernel_routine
 
