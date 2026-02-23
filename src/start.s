@@ -14,6 +14,11 @@
 
 .section .data
 
+.global GDT_size
+.global IDT_size
+GDT_size:  .2byte 4
+IDT_size:  .2byte 2047
+
 .align(8)
 .global _GDT
 _GDT:
@@ -25,6 +30,7 @@ _GDT_e:
 _IDT = .
     .skip(800)
 _IDT_e = .
+
 
 # .=.+4
 # .space(4)
@@ -40,17 +46,19 @@ stack_top:
 
 .section .text
 
-.global _start
 
 
-
+.global _keyboard_int
 _keyboard_int:
+    pusha
     # call keyboard_event
     # movl $0xD0, 0x64
     # movl 60, %eax
     pushl $MESSAGE
     call vga_str_put
-    ret
+    popl %eax
+    popa
+    iret
 
 
 
@@ -90,12 +98,47 @@ _send_keyboard_command:
     popl %ebp
     ret
 
+flush_gdt:
+    pushl %ebp
+    movl %esp, %ebp
+
+    sub $6, %esp
+
+    movw GDT_size, %ax
+    movw %ax, (%esp)
+    movl $_GDT, 2(%esp)
+    lgdt (%esp)
+
+    add $6, %esp
+
+    popl %ebp
+    ret
+
+flush_idt:
+    pushl %ebp
+    movl %esp, %ebp
+
+    sub $6, %esp
+
+    movw IDT_size, %ax
+    movw %ax, (%esp)
+    movl $_IDT, 2(%esp)
+    lidt (%esp)
+
+    add $6, %esp
+
+    popl %ebp
+    ret
+
+
+
+.global _start
 _start:
     cli
     movl $stack_top, %esp
     movl _keyboard_int, %eax # Store segment at 0x26
-    lidt _IDT
-    lgdt _GDT
+    # lidt _IDT
+    # lgdt _GDT
 
 
 
@@ -177,6 +220,23 @@ _start:
 
     call kernel_init
 
+    call flush_gdt
+
+    mov $0x10, %ax      # data selector (GDT entry 2 -> 2*8 = 0x10)
+    mov %ax, %ds
+    mov %ax, %es
+    mov %ax, %fs
+    mov %ax, %gs
+    mov %ax, %ss
+
+    jmp $0x08, $gdt_flush_done  # far jump to reload CS
+gdt_flush_done:
+
+    call flush_idt
+
+    nop
+
+    int $3
 
     pushl $MESSAGE
     call vga_str_put
