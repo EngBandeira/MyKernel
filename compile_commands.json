@@ -1,0 +1,65 @@
+[
+  {
+    "file": "src/main.c",
+    "arguments": [
+      "gcc",
+      "-fno-stack-protector",
+      "-ffreestanding",
+      "-g",
+      "-ggdb",
+      "-Wall",
+      "-Wextra",
+      "-c",
+      "-m32",
+      "-march=i686",
+      "-Iinclude",
+      "src/main.c",
+      "-o",
+      "build/src_main.o"
+    ],
+    "directory": "/home/bandeira/Documents/GIT/MyKernel",
+    "output": "build/src_main.o"
+  },
+  {
+    "file": "src/drivers/keyboard.c",
+    "arguments": [
+      "gcc",
+      "-fno-stack-protector",
+      "-ffreestanding",
+      "-g",
+      "-ggdb",
+      "-Wall",
+      "-Wextra",
+      "-c",
+      "-m32",
+      "-march=i686",
+      "-Iinclude",
+      "src/drivers/keyboard.c",
+      "-o",
+      "build/drivers_keyboard.o"
+    ],
+    "directory": "/home/bandeira/Documents/GIT/MyKernel",
+    "output": "build/drivers_keyboard.o"
+  },
+  {
+    "file": "src/drivers/vga_text.c",
+    "arguments": [
+      "gcc",
+      "-fno-stack-protector",
+      "-ffreestanding",
+      "-g",
+      "-ggdb",
+      "-Wall",
+      "-Wextra",
+      "-c",
+      "-m32",
+      "-march=i686",
+      "-Iinclude",
+      "src/drivers/vga_text.c",
+      "-o",
+      "build/drivers_vga_text.o"
+    ],
+    "directory": "/home/bandeira/Documents/GIT/MyKernel",
+    "output": "build/drivers_vga_text.o"
+  }
+]

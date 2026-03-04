@@ -1,0 +1,23 @@
+#ifndef DRIVER_PIC
+#define DRIVER_PIC
+
+#include "drivers/io.h"
+
+
+#define R_PIC_M_STATUS_REGISTER 0x20
+#define W_PIC_M_COMMAND_REGISTER 0x20
+
+#define RW_PIC_M_DATA_REGISTER 0x21
+#define RW_PIC_M_INT_MASK_REGISTER 0x21
+
+#define R_PIC_SL_STATUS_REGISTER 0xA0
+#define W_PIC_SL_COMMAND_REGISTER 0xA0
+
+#define RW_PIC_SL_DATA_REGISTER 0xA1
+#define RW_PIC_SL_INT_MASK_REGISTER 0xA1
+
+
+void init_pic();
+
+
+#endif

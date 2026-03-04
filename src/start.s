@@ -52,15 +52,21 @@ stack_top:
 
 
 
+.global _timer_int
+_timer_int:
+    pusha
+
+    call timer_handler
+    # movb $0x20, %al
+    # outb %al, $0x20
+    popa
+    iret
+
+
 .global _keyboard_int
 _keyboard_int:
     pusha
-    # call keyboard_event
-    # movl $0xD0, 0x64
-    # movl 60, %eax
-    # pushl $MESSAGE
-    # call vga_str_put
-    # popl %eax
+
     call keyboard_handler
     # movb $0x20, %al
     # outb %al, $0x20
@@ -126,12 +132,6 @@ _start:
     call flush_idt
 
     sti
-
-    int $9
-
-    # movb 0xFE, %al
-    # outb  %al, 0x64
-
 
     call kernel_routine
 
