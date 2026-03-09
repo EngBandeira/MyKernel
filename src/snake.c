@@ -50,6 +50,10 @@ void key_snake(char b) {
             snake.dir.y = 0;
             break;
         }
+        case 'K': {
+            snake.length += 5;
+            break;
+        }
         default: {
             return;
         }

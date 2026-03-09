@@ -28,7 +28,6 @@ void pritata(char b) {
 }
 
 void kernel_init() {
-
     init_gdt();
     init_idt();
     init_pic();
@@ -36,5 +35,8 @@ void kernel_init() {
     init_pit();
     vga_init();
     p2_keyboard_init(pritata);
-    set_count_pit(1);
+
+    for(int pg_dir = 0; pg_dir < 1024; pg_dir++) {
+        set_pg_dir_entry(pg_dir, (void*)(4096*4096*pg_dir), PAGE_DIR_PRESENT | PAGE_DIR_READ_WRITE | PAGE_DIR_USER );
+    }
 }

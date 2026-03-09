@@ -35,6 +35,13 @@ _IDT = .
     .skip(800)
 _IDT_e = .
 
+.align(4)
+.global _PG_DIR
+_PG_DIR = .
+    .skip(4096)
+_PG_DIR_e = .
+
+
 
 # .=.+4
 # .space(4)
@@ -51,27 +58,66 @@ stack_top:
 .section .text
 
 
-
-.global _timer_int
-_timer_int:
+.macro set_irq number
+.global _int_handler\number
+_int_handler\number:
     pusha
-
-    call timer_handler
-    # movb $0x20, %al
-    # outb %al, $0x20
+    call _int_callback\number
     popa
+    movb $0x20, %al
+    outb %al, $0x20
     iret
+.endm
 
 
-.global _keyboard_int
-_keyboard_int:
+.macro set_irq_func number callback
+.global _int_handler\number
+_int_handler\number:
     pusha
-
-    call keyboard_handler
-    # movb $0x20, %al
-    # outb %al, $0x20
+    call \callback
     popa
+    movb $0x20, %al
+    outb %al, $0x20
     iret
+.endm
+
+
+
+set_irq 0
+set_irq 1
+set_irq 2
+set_irq 3
+set_irq 4
+set_irq 5
+set_irq 6
+set_irq 7
+set_irq 8
+set_irq 9
+set_irq 10
+set_irq 11
+set_irq 12
+set_irq 13
+set_irq 14
+set_irq 15
+set_irq 16
+set_irq 17
+set_irq 18
+set_irq 19
+set_irq 20
+set_irq 21
+set_irq 22
+set_irq 23
+set_irq 24
+set_irq 25
+set_irq 26
+set_irq 27
+set_irq 28
+set_irq 29
+set_irq 30
+set_irq 31
+
+set_irq_func 32 timer_handler
+set_irq_func 33 keyboard_handler
 
 
 
@@ -118,7 +164,21 @@ flush_idt:
     popl %ebp
     ret
 
+set_paging:
 
+    movl $_PG_DIR, %eax
+    movl %eax, %cr3
+
+    movl %cr0, %eax
+    or $1<<31, %eax
+    movl %eax, %cr0
+
+    jmp .pinto
+    # ret
+
+# 0x1000000 = 1M
+# for 16M need 4096 entries
+# 4 tables then 4
 
 .global _start
 _start:
@@ -132,6 +192,9 @@ _start:
     call flush_idt
 
     sti
+
+    jmp set_paging
+.pinto:
 
     call kernel_routine
 

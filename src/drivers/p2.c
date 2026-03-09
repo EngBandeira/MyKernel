@@ -86,7 +86,6 @@ void _keyboard_command_wdata(uint8_t command, uint8_t data) {
 }
 
 void p2_keyboard_init(void (*press_callback_)(char key)) {
-    set_handler(0x21, (uint32_t)&_keyboard_int);
     _keyboard_command(0xFF);
     while(inb(RW_P2_DATA_PORT) != ACK_KEYBOARD);
 
