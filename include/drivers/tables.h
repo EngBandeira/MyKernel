@@ -29,7 +29,7 @@ void init_idt();
 void set_gdt_entry(uint16_t index, uint32_t limit , uint32_t base, uint8_t access,  uint8_t flags);
 void set_int_handler(uint16_t interruption, void (*callback)(void));
 void set_idt_entry(uint16_t index, uint32_t offset, uint16_t seg_selector, uint8_t gate_type, uint8_t DPL);
-void set_pg_table_entry(uint16_t index, void *address, uint16_t flags);
-void set_pg_dir_entry(uint16_t index, void *address, uint8_t flags);
+void set_page_table_entry(uint32_t *entry_addr, char *pg_address,  uint16_t flags);
+void set_pg_dir_entry(uint16_t index, void *pg_table_address, uint8_t flags);
 
 #endif

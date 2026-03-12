@@ -9,10 +9,20 @@
 #include "drivers/io.h"
 #include "drivers/pic.h"
 #include "drivers/tables.h"
+#include "drivers/memory.h"
 #include "time.h"
 #include "snake.h"
 #include "wait.h"
 
+extern char _text_i;
+extern char _text_e;
+extern char _data_bss_i;
+extern char _data_bss_e;
+extern char _heap_start;
+static char* _heap_end = & _heap_start;
+extern void _PG_DIR;
+
+// extern char _heap_start;
 
 
 void kernel_routine() {
@@ -35,8 +45,10 @@ void kernel_init() {
     init_pit();
     vga_init();
     p2_keyboard_init(pritata);
-
-    for(int pg_dir = 0; pg_dir < 1024; pg_dir++) {
-        set_pg_dir_entry(pg_dir, (void*)(4096*4096*pg_dir), PAGE_DIR_PRESENT | PAGE_DIR_READ_WRITE | PAGE_DIR_USER );
+    // set_pg_dir_entry(0, , uint8_t flags)
+    for( int i = 0; i < 1024; i++ ) {
+        set_page_table_entry(((uint32_t*)&_heap_start) + i, (char*)(4096 * i), PAGE_TABLE_GLOBAL | PAGE_TABLE_PRESENT | PAGE_TABLE_READ_WRITE);
     }
+    _heap_end += 4096;
+    set_pg_dir_entry(0, &_heap_start , PAGE_DIR_PRESENT | PAGE_DIR_READ_WRITE | PAGE_DIR_USER);
 }

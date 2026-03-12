@@ -1,8 +1,8 @@
-.set ALIGN,    1<<0             /* align loaded modules on page boundaries */
-.set MEMINFO,  1<<1             /* provide memory map */
-.set FLAGS,    ALIGN | MEMINFO  /* this is the Multiboot 'flag' field */
-.set MAGIC,    0x1BADB002       /* 'magic number' lets bootloader find the header */
-.set CHECKSUM, -(MAGIC + FLAGS) /* checksum of above, to prove we are multiboot */
+.set ALIGN,    1<<0
+.set MEMINFO,  1<<1
+.set FLAGS,    ALIGN | MEMINFO
+.set MAGIC,    0x1BADB002
+.set CHECKSUM, -(MAGIC + FLAGS)
 .set KEYBOARD_TIMEOUT,   200
 .set RW_P2_DATA_PORT,   0x60
 .set R_STATUS_REGISTER,   0x64
@@ -35,7 +35,7 @@ _IDT = .
     .skip(800)
 _IDT_e = .
 
-.align(4)
+.align(4096)
 .global _PG_DIR
 _PG_DIR = .
     .skip(4096)
@@ -173,8 +173,7 @@ set_paging:
     or $1<<31, %eax
     movl %eax, %cr0
 
-    jmp .pinto
-    # ret
+    jmp $0x8, $.paging_return
 
 # 0x1000000 = 1M
 # for 16M need 4096 entries
@@ -191,10 +190,13 @@ _start:
 
     call flush_idt
 
-    sti
 
     jmp set_paging
-.pinto:
+
+.paging_return:
+
+    sti
+
 
     call kernel_routine
 

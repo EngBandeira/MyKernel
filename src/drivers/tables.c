@@ -63,11 +63,16 @@ void set_idt_entry(uint16_t index, uint32_t offset, uint16_t seg_selector, uint8
     ptr[7] = ((uint8_t*)&offset)[3];
 }
 
+void set_page_table_entry(uint32_t *entry_addr, char *pg_address,  uint16_t flags) {
+    *entry_addr = (uint32_t)pg_address & 0xFFFFFFFF << 12;
+    *((uint8_t*)entry_addr) = flags;
+    *((uint8_t*)entry_addr + 1) |= flags & 1 << 8;
+}
 
-void set_pg_dir_entry(uint16_t index, void *address, uint8_t flags) {
+void set_pg_dir_entry(uint16_t index, void *pg_table_address, uint8_t flags) {
     uint8_t *ptr8 = (uint8_t *)&_PG_DIR + 4 * index;
     uint32_t *ptr = (uint32_t *)&_PG_DIR + index;
 
-    *ptr = (uint32_t)address >> 12;
+    *ptr = (uint32_t)pg_table_address & 0xFFFFFFFF << 12;
     *ptr8 = flags;
 }
