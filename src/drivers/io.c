@@ -1,4 +1,5 @@
 #include "drivers/io.h"
+#include <stdint.h>
 
 void send_error(){
     // vga_
@@ -11,6 +12,14 @@ void cli() {
 
 void sti() {
     asm("sti");
+}
+
+uint32_t read_cr2() {
+    uint32_t rt;
+    asm("movl %%cr2, %%eax\n\t"
+        "movl %%eax, %0"
+        : "=r" (rt));
+    return rt;
 }
 
 void outb(uint8_t value, uint16_t port) {

@@ -174,7 +174,8 @@ set_paging:
     movl %eax, %cr0
 
     jmp $0x8, $.paging_return
-
+# 0xFFFFFFFF
+# 0x400000
 # 0x1000000 = 1M
 # for 16M need 4096 entries
 # 4 tables then 4
@@ -195,8 +196,10 @@ _start:
 
 .paging_return:
 
+
     sti
 
+    movl 0x400000, %eax
 
     call kernel_routine
 

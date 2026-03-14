@@ -8,6 +8,8 @@
 void cli();
 void sti();
 
+uint32_t read_cr2();
+
 void outb(uint8_t value, uint16_t port);
 
 void outl(uint32_t value, uint16_t port);
